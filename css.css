@@ -1,0 +1,52 @@
+#ttt
+{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#message
+{
+    text-align: center;
+    font-size: 130%;
+    color: rgb(245, 245, 245);
+    text-shadow:
+    -1.5px -1.5px 0 #000,
+    1.5px -1.5px 0 #000,
+    -1.5px 1.5px 0 #000,
+    1.5px 1.5px 0 #000;  
+}
+
+button
+{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100px;
+    height: 30px;
+    margin-bottom: 2px;
+    background: firebrick;
+    border-color: black;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    transition-duration: 0.4s;
+}
+
+.buttons
+{
+    margin-top: -5px;
+}
+
+button:hover {
+    background-color:lightcoral;
+    color: black;
+}
+
+body 
+{
+    background-color: #AAA;
+}
