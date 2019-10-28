@@ -25,7 +25,7 @@ var img = new Image();
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
 img.onload = function(){
-		
+		window.orientation = 1;
        	alert(window.orientation);
 		
 	// EXIF.getData(img, function() {
