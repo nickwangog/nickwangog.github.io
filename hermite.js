@@ -6,7 +6,7 @@ var img_w;
 var img_h;
 var current_size = false;
 var URL = window.webkitURL || window.URL;
-var orientation = 1;
+var orientation;
 
 $("#file_input").change(function(e){
 
@@ -25,20 +25,20 @@ var img = new Image();
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
 img.onload = function(){
-		window.orientation = 1;
-       	alert(window.orientation);
-		
-	// EXIF.getData(img, function() {
- //        orientation = EXIF.getTag(this, "Orientation");
-       	window.onorientationchange = readDeviceOrientation;
-       	console.log(window.orientation);
+	
+	window.orientation = 1;
+	EXIF.getData(img, function() {
+        orientation = EXIF.getTag(this, "Orientation");
+
+       	window.onorientationchange = readDeviceOrientation();
+       	// console.log(window.orientation);
        	alert(window.orientation);
        	if (orientation == 6 || window.orientation == 0 ) {
-       		alert("Hello");
+       		// alert("Hello");
 		canvas.className = 'element';
 
 	}
-    // });
+    });
 
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE);
