@@ -30,7 +30,9 @@ img.onload = function(){
 	EXIF.getData(img, function() {
         orientation = EXIF.getTag(this, "Orientation");
        	console.log(orientation);
+       	alert(orientation);
        	if (orientation == 6) {
+       		alert("Hello");
 		canvas.className = 'element';
 
 	}
