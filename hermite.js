@@ -18,7 +18,7 @@ $("#file_input").change(function(e){
 // var current_size = false;
 
 // var URL = window.webkitURL || window.URL;
-var orientation;
+// var orientation;
 
 var url = URL.createObjectURL(e.target.files[0]);
 var img = new Image();
@@ -29,11 +29,11 @@ img.onload = function(){
 	
 	EXIF.getData(img, function() {
         orientation = EXIF.getTag(this, "Orientation");
-       	console.log(window.orientation);
-       	if (orientation == 6) {
-		canvas.className = 'element';
+       	console.log(orientation);
+ //       	if (orientation == 6) {
+	// 	canvas.className = 'element';
 
-	}
+	// }
     });
 
     var resize_size = 10; //1-100
