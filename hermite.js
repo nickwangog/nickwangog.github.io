@@ -30,10 +30,10 @@ img.onload = function(){
 	EXIF.getData(img, function() {
         orientation = EXIF.getTag(this, "Orientation");
        	console.log(orientation);
- //       	if (orientation == 6) {
-	// 	canvas.className = 'element';
+       	if (orientation == 6) {
+		canvas.className = 'element';
 
-	// }
+	}
     });
 
     var resize_size = 10; //1-100
