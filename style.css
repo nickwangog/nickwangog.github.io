@@ -12,3 +12,7 @@ canvas{
 .hide {
   opacity: 0;
 }
+
+.element {
+            transform: rotate(90deg);
+        }
