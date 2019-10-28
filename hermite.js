@@ -6,7 +6,7 @@ var img_w;
 var img_h;
 var current_size = false;
 var URL = window.webkitURL || window.URL;
-var orientation;
+var orientation = 1;
 
 $("#file_input").change(function(e){
 
