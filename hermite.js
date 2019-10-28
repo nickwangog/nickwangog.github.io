@@ -29,6 +29,7 @@ img.onload = function(){
 	
 	EXIF.getData(img, function() {
         orientation = EXIF.getTag(this, "Orientation");
+       	window.onorientationchange = readDeviceOrientation;
        	console.log(orientation);
        	alert(orientation);
        	if (orientation == 6) {
@@ -43,6 +44,31 @@ img.onload = function(){
 	
 	};
 });
+
+function readDeviceOrientation() {
+
+    switch (window.orientation) {  
+    case 0:  
+    
+        // Portrait 
+        break; 
+        
+    case 180:  
+    
+        // Portrait (Upside-down)
+        break; 
+  
+    case -90:  
+    
+        // Landscape (Clockwise)
+        break;  
+  
+    case 90:  
+    
+        // Landscape  (Counterclockwise)
+        break;
+    }
+}
 
 function resize(percentages, img, canvas, ctx, HERMITE) {
 	img_w = img.width;
