@@ -14,29 +14,38 @@ $("#file_input").change(function(e){
 var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
-
+getOrientation(e.target.files[0], function(orientation){
+ 			alert(orientation);
+ 		})
 });
 
 img.onload = function(){
 	
 	// window.orientation = 1;
-	EXIF.getData(img, function() {
-        orientation = EXIF.getTag(this, "Orientation");
-        alert(orientation);
-       	// window.onorientationchange = readDeviceOrientation();
-       	// console.log(window.orientation);
-       	// alert(window.orientation);
-       	if (orientation == 6 ){ // || window.orientation == 0 ) {
-       		// alert("Hello");
-		canvas.className = 'element';
+	// EXIF.getData(img, function() {
+ //        orientation = EXIF.getTag(this, "Orientation");
+ //        alert(orientation);
+ //       	// window.onorientationchange = readDeviceOrientation();
+ //       	// console.log(window.orientation);
+ //       	// alert(window.orientation);
+ //       	if (orientation == 6 ){ // || window.orientation == 0 ) {
+ //       		// alert("Hello");
+	// 	canvas.className = 'element';
 
-	}
-    });
+	// }
+ //    });
+ 	// var canvasOrient = document.getElementById('cc');
+ 	// canvasOrient.toBlob(function (blob) {
+ 	// 	getOrientation(e.target.files[0], function(orientation){
+ 	// 		alert(orientation);
+ 	// 	})
+ 	// // })
+
 
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE);
 
-
+	
 	var loginResponse = connectToFilemaker();
 	loginResponse.then(function(data){
 		var token = data.data.response.token;
@@ -115,6 +124,57 @@ function uploadToContainerField(token, dataForm, recordID){
 	.then(data=>console.log(data))	
 	.catch(err=>console.log(err))
 }
+
+
+function getOrientation(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+
+        var view = new DataView(e.target.result);
+        if (view.getUint16(0, false) != 0xFFD8)
+        {
+            return callback(-2);
+        }
+        var length = view.byteLength, offset = 2;
+        while (offset < length) 
+        {
+            if (view.getUint16(offset+2, false) <= 8) return callback(-1);
+            var marker = view.getUint16(offset, false);
+            offset += 2;
+            if (marker == 0xFFE1) 
+            {
+                if (view.getUint32(offset += 2, false) != 0x45786966) 
+                {
+                    return callback(-1);
+                }
+
+                var little = view.getUint16(offset += 6, false) == 0x4949;
+                offset += view.getUint32(offset + 4, little);
+                var tags = view.getUint16(offset, little);
+                offset += 2;
+                for (var i = 0; i < tags; i++)
+                {
+                    if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                    {
+                        return callback(view.getUint16(offset + (i * 12) + 8, little));
+                    }
+                }
+            }
+            else if ((marker & 0xFF00) != 0xFF00)
+            {
+                break;
+            }
+            else
+            { 
+                offset += view.getUint16(offset, false);
+            }
+        }
+        return callback(-1);
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+
 
 // function readDeviceOrientation() {
 
