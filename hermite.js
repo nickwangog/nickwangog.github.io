@@ -7,6 +7,8 @@ var img_h;
 var current_size = false;
 var URL = window.webkitURL || window.URL;
 var orientation;
+// let token = 0;
+var img = new Image();
 
 $("#file_input").change(function(e){
 
@@ -21,30 +23,129 @@ $("#file_input").change(function(e){
 // var orientation;
 
 var url = URL.createObjectURL(e.target.files[0]);
-var img = new Image();
+
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
+
+});
+
 img.onload = function(){
 	
-	window.orientation = 1;
-	EXIF.getData(img, function() {
-        orientation = EXIF.getTag(this, "Orientation");
+	// window.orientation = 1;
+	// EXIF.getData(img, function() {
+ //        orientation = EXIF.getTag(this, "Orientation");
 
-       	window.onorientationchange = readDeviceOrientation();
-       	// console.log(window.orientation);
-       	alert(window.orientation);
-       	if (orientation == 6 || window.orientation == 0 ) {
-       		// alert("Hello");
-		canvas.className = 'element';
+ //       	// window.onorientationchange = readDeviceOrientation();
+ //       	// console.log(window.orientation);
+ //       	alert(window.orientation);
+ //       	if (orientation == 6 ){ // || window.orientation == 0 ) {
+ //       		// alert("Hello");
+	// 	canvas.className = 'element';
 
-	}
-    });
+	// }
+ //    });
 
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE);
+
 	
-	};
-});
+	// var token = new connectToFilemaker();
+	// token.then(data=>{
+	// 	alert(data.data.response.token);
+	// })
+	var res = connectToFilemaker();
+	// connectToFilemaker().then(function(data){
+	// 		token = data.data.response.token;
+	// 	})
+	res.then(function(data){
+		// console.log(data.data.response.token);
+		// token = data;
+		var token = data.data.response.token;
+		// alert(token);
+		var dataForm = new FormData();
+		var sendCanvas = document.getElementById('cc');
+		// var blob = sendCanvas.getAsFile();
+		// var dataUrl = sendCanvas.toDataURL("image/jpeg")
+		// var blob = dataURItoBlob(dataUrl);
+        sendCanvas.toBlob(function (blob) {
+        console.log("Blob: " + blob);
+        dataForm.append('upload', blob, "image.png");
+        console.log("Dataform: " + dataForm);
+		uploadToContainerField(token, dataForm);
+
+    });
+		// let formData = new formData();
+		// file = document.querySelector("cc");
+		// formData.append(file)
+	})
+	// console.log("Token is " + token);
+
+
+};
+
+
+
+
+function connectToFilemaker(){
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/sessions';
+	const headers = {
+		'Authorization': 'Basic YWRtaW46d2FmZmxlcw==',
+		'Content-Type': 'application/json'
+	}
+	return axios({
+		method: 'post',
+		url: Url,
+		headers: headers,
+		data: {}
+	})
+	// .then(data=>{
+	// 	console.log(data.data.response.token);
+		
+	// 	// return(data);
+	// })
+	.then(function(data){
+		// let token = data.data.response.token;
+		// console.log(data.data.response.token);
+		// window.token = data.data.response.token;
+		return(data);
+	})
+	.catch(err=>console.log(err))
+	
+}
+
+
+function uploadToContainerField(token, dataForm){
+	console.log(dataForm.get('upload'));
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records/2/containers/Field';
+	// const Url= 'https://nicktest.free.beeceptor.com';
+
+	const headers = {
+		'Authorization': 'Bearer ' + token,
+		// 'Content-Type': 'multipart/form-data',
+		// 'async': 'true',
+		// "Accept": "*/*"
+
+		// 'Content-Transfer-Encoding': 'base64'
+		// Content-Disposition: form-data; name="myFile"; filename="img.jpg"
+		// Content-Type: image/jpeg
+  		
+	}
+	axios({
+		method: 'post',
+		url: Url,
+		headers: headers,
+		crossDomain: true,
+		// upload: dataForm,
+		data: dataForm,
+        cache : false,
+        contentType: false,
+        processData: false
+		// data: dataForm
+	})
+	.then(data=>console.log(data))	
+	.catch(err=>console.log(err))
+}
+
 
 function readDeviceOrientation() {
 
