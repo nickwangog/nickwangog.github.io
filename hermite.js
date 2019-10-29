@@ -23,7 +23,6 @@ getOrientation(e.target.files[0], function(orientation){
 });
 
 img.onload = function(){
-	// ctx.restore();
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE , orientationTwo);
 	var loginResponse = connectToFilemaker();
@@ -41,8 +40,6 @@ img.onload = function(){
     	});
 	})
 };
-
-
 
 
 function connectToFilemaker(){
@@ -105,7 +102,6 @@ function uploadToContainerField(token, dataForm, recordID){
 	.catch(err=>console.log(err))
 }
 
-
 function getOrientation(file, callback) {
     var reader = new FileReader();
     reader.onload = function(e) {
@@ -153,7 +149,6 @@ function getOrientation(file, callback) {
     };
     reader.readAsArrayBuffer(file);
 }
-
 
 function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
 	img_w = img.width;

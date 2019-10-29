@@ -9,10 +9,21 @@ canvas{
 	-ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
 
-.hide {
-  opacity: 0;
+body {
+  padding: 0;
+  margin: 0;
 }
 
-.element {
+.box {
+    margin-left: auto; 
+    margin-right: auto;
+    height: 75%;
+}
+
+.imgButton{
+    text-align:center;
+}
+
+.rotate {
             transform: rotate(90deg);
         }
