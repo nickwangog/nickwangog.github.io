@@ -8,6 +8,8 @@ var current_size = false;
 var URL = window.webkitURL || window.URL;
 var orientation;
 var img = new Image();
+var orientationTwo = 0;
+var rotated = 0;
 
 $("#file_input").change(function(e){
 
@@ -15,7 +17,10 @@ var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
 getOrientation(e.target.files[0], function(orientation){
- 			alert(orientation);
+ 			// alert(orientation);
+ 			if (orientation == 6 ){
+ 				orientationTwo = 6;
+ 			}
  		})
 });
 
@@ -27,7 +32,7 @@ img.onload = function(){
  //        alert(orientation);
  //       	// window.onorientationchange = readDeviceOrientation();
  //       	// console.log(window.orientation);
- //       	// alert(window.orientation);
+       	// alert("Hello" + orientation);
  //       	if (orientation == 6 ){ // || window.orientation == 0 ) {
  //       		// alert("Hello");
 	// 	canvas.className = 'element';
@@ -40,10 +45,11 @@ img.onload = function(){
  	// 		alert(orientation);
  	// 	})
  	// // })
-
-
+ 	
+ 	// alert(orientationTwo);
     var resize_size = 10; //1-100
-	resize(resize_size, img, canvas, ctx, HERMITE);
+	resize(resize_size, img, canvas, ctx, HERMITE , orientationTwo);
+
 
 	
 	var loginResponse = connectToFilemaker();
@@ -175,33 +181,7 @@ function getOrientation(file, callback) {
 }
 
 
-
-// function readDeviceOrientation() {
-
-//     switch (window.orientation) {  
-//     case 0:  
-    
-//         // Portrait 
-//         break; 
-        
-//     case 180:  
-    
-//         // Portrait (Upside-down)
-//         break; 
-  
-//     case -90:  
-    
-//         // Landscape (Clockwise)
-//         break;  
-  
-//     case 90:  
-    
-//         // Landscape  (Counterclockwise)
-//         break;
-//     }
-// }
-
-function resize(percentages, img, canvas, ctx, HERMITE) {
+function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
 	img_w = img.width;
 	img_h = img.height;
 	var w =  Math.round(img_w * percentages / 100);
@@ -210,7 +190,20 @@ function resize(percentages, img, canvas, ctx, HERMITE) {
 	//prepare canvas
 	canvas.width = img_w;
 	canvas.height = img_h;
-	
+	if (rotated == 1){
+		ctx.rotate(-0.5 * Math.PI);
+        ctx.translate(-canvas.width, 0);
+		rotated = 0;
+	}
+	if (orientationTwo == 6){
+		// 90° rotate right
+		canvas.width = img_h;
+			canvas.height = img_w;
+            ctx.rotate(0.5 * Math.PI);
+            ctx.translate(0, -canvas.width);
+            
+            rotated = 1;
+	}
 	//draw image
 	ctx.drawImage(img, 0, 0);
 	HERMITE.resample_single(canvas, w, h, true);
