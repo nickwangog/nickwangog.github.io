@@ -17,7 +17,6 @@ var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
 getOrientation(e.target.files[0], function(orientation){
- 			// alert(orientation);
  			if (orientation == 6 ){
  				orientationTwo = 6;
  			}
@@ -25,33 +24,8 @@ getOrientation(e.target.files[0], function(orientation){
 });
 
 img.onload = function(){
-	
-	// window.orientation = 1;
-	// EXIF.getData(img, function() {
- //        orientation = EXIF.getTag(this, "Orientation");
- //        alert(orientation);
- //       	// window.onorientationchange = readDeviceOrientation();
- //       	// console.log(window.orientation);
-       	// alert("Hello" + orientation);
- //       	if (orientation == 6 ){ // || window.orientation == 0 ) {
- //       		// alert("Hello");
-	// 	canvas.className = 'element';
-
-	// }
- //    });
- 	// var canvasOrient = document.getElementById('cc');
- 	// canvasOrient.toBlob(function (blob) {
- 	// 	getOrientation(e.target.files[0], function(orientation){
- 	// 		alert(orientation);
- 	// 	})
- 	// // })
- 	
- 	// alert(orientationTwo);
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE , orientationTwo);
-
-
-	
 	var loginResponse = connectToFilemaker();
 	loginResponse.then(function(data){
 		var token = data.data.response.token;
@@ -186,7 +160,7 @@ function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
 	img_h = img.height;
 	var w =  Math.round(img_w * percentages / 100);
 	var h =  Math.round(img_h * percentages / 100);
-
+	alert ( orientationTwo);
 	//prepare canvas
 	canvas.width = img_w;
 	canvas.height = img_h;
