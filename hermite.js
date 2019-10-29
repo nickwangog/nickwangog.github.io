@@ -7,23 +7,11 @@ var img_h;
 var current_size = false;
 var URL = window.webkitURL || window.URL;
 var orientation;
-// let token = 0;
 var img = new Image();
 
 $("#file_input").change(function(e){
 
-// var HERMITE = new Hermite_class();
-// var canvas = document.getElementById("cc");
-// var ctx = canvas.getContext("2d");
-// var img_w;
-// var img_h;
-// var current_size = false;
-
-// var URL = window.webkitURL || window.URL;
-// var orientation;
-
 var url = URL.createObjectURL(e.target.files[0]);
-
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
 
@@ -37,7 +25,7 @@ img.onload = function(){
 
  //       	// window.onorientationchange = readDeviceOrientation();
  //       	// console.log(window.orientation);
- //       	alert(window.orientation);
+ //       	// alert(window.orientation);
  //       	if (orientation == 6 ){ // || window.orientation == 0 ) {
  //       		// alert("Hello");
 	// 	canvas.className = 'element';
@@ -48,39 +36,21 @@ img.onload = function(){
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE);
 
-	
-	// var token = new connectToFilemaker();
-	// token.then(data=>{
-	// 	alert(data.data.response.token);
-	// })
-	var res = connectToFilemaker();
-	// connectToFilemaker().then(function(data){
-	// 		token = data.data.response.token;
-	// 	})
-	res.then(function(data){
-		// console.log(data.data.response.token);
-		// token = data;
+
+	var loginResponse = connectToFilemaker();
+	loginResponse.then(function(data){
 		var token = data.data.response.token;
-		// alert(token);
-		var dataForm = new FormData();
-		var sendCanvas = document.getElementById('cc');
-		// var blob = sendCanvas.getAsFile();
-		// var dataUrl = sendCanvas.toDataURL("image/jpeg")
-		// var blob = dataURItoBlob(dataUrl);
-        sendCanvas.toBlob(function (blob) {
-        console.log("Blob: " + blob);
-        dataForm.append('upload', blob, "image.png");
-        console.log("Dataform: " + dataForm);
-		uploadToContainerField(token, dataForm);
-
-    });
-		// let formData = new formData();
-		// file = document.querySelector("cc");
-		// formData.append(file)
+		var recordResponse = creatFMRecord (token);
+		recordResponse.then(function(data){
+			var recordID = data.data.response.recordId;
+			var dataForm = new FormData();
+			var sendCanvas = document.getElementById('cc');
+	        sendCanvas.toBlob(function (blob) {
+	        dataForm.append('upload', blob, "image.png");
+			uploadToContainerField(token, dataForm, recordID);
+			})
+    	});
 	})
-	// console.log("Token is " + token);
-
-
 };
 
 
@@ -98,79 +68,78 @@ function connectToFilemaker(){
 		headers: headers,
 		data: {}
 	})
-	// .then(data=>{
-	// 	console.log(data.data.response.token);
-		
-	// 	// return(data);
-	// })
 	.then(function(data){
-		// let token = data.data.response.token;
-		// console.log(data.data.response.token);
-		// window.token = data.data.response.token;
+		return(data);
+	})
+	.catch(err=>console.log(err))
+}
+
+function creatFMRecord(token){
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records';
+	const headers = {
+		'Authorization': 'Bearer ' + token,
+		'Content-Type': 'application/json',
+	}
+	return axios({
+		method: 'post',
+		url: Url,
+		headers: headers,
+		crossDomain: true,
+		data: { "fieldData": {}},
+   		cache : false,
+        contentType: false,
+        processData: false
+	})
+	.then(function(data){
 		return(data);
 	})
 	.catch(err=>console.log(err))
 	
 }
 
-
-function uploadToContainerField(token, dataForm){
-	console.log(dataForm.get('upload'));
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records/2/containers/Field';
-	// const Url= 'https://nicktest.free.beeceptor.com';
-
+function uploadToContainerField(token, dataForm, recordID){
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records/' + recordID + '/containers/Field';
 	const headers = {
-		'Authorization': 'Bearer ' + token,
-		// 'Content-Type': 'multipart/form-data',
-		// 'async': 'true',
-		// "Accept": "*/*"
-
-		// 'Content-Transfer-Encoding': 'base64'
-		// Content-Disposition: form-data; name="myFile"; filename="img.jpg"
-		// Content-Type: image/jpeg
-  		
+		'Authorization': 'Bearer ' + token
 	}
 	axios({
 		method: 'post',
 		url: Url,
 		headers: headers,
 		crossDomain: true,
-		// upload: dataForm,
 		data: dataForm,
         cache : false,
         contentType: false,
         processData: false
-		// data: dataForm
 	})
 	.then(data=>console.log(data))	
 	.catch(err=>console.log(err))
 }
 
+// function readDeviceOrientation() {
 
-function readDeviceOrientation() {
-
-    switch (window.orientation) {  
-    case 0:  
+//     switch (window.orientation) {  
+//     case 0:  
     
-        // Portrait 
-        break; 
+//         // Portrait 
+//         break; 
         
-    case 180:  
+//     case 180:  
     
-        // Portrait (Upside-down)
-        break; 
+//         // Portrait (Upside-down)
+//         break; 
   
-    case -90:  
+//     case -90:  
     
-        // Landscape (Clockwise)
-        break;  
+//         // Landscape (Clockwise)
+//         break;  
   
-    case 90:  
+//     case 90:  
     
-        // Landscape  (Counterclockwise)
-        break;
-    }
-}
+//         // Landscape  (Counterclockwise)
+//         break;
+//     }
+// }
 
 function resize(percentages, img, canvas, ctx, HERMITE) {
 	img_w = img.width;
