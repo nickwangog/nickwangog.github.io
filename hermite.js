@@ -12,7 +12,6 @@ var orientationTwo = 0;
 var rotated = 0;
 
 $("#file_input").change(function(e){
-
 var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
 img.crossOrigin = "Anonymous"; //cors support
@@ -24,6 +23,7 @@ getOrientation(e.target.files[0], function(orientation){
 });
 
 img.onload = function(){
+	// ctx.restore();
     var resize_size = 10; //1-100
 	resize(resize_size, img, canvas, ctx, HERMITE , orientationTwo);
 	var loginResponse = connectToFilemaker();
@@ -160,27 +160,29 @@ function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
 	img_h = img.height;
 	var w =  Math.round(img_w * percentages / 100);
 	var h =  Math.round(img_h * percentages / 100);
-	alert ( orientationTwo);
+
 	//prepare canvas
 	canvas.width = img_w;
 	canvas.height = img_h;
-	if (rotated == 1){
-		ctx.rotate(-0.5 * Math.PI);
-        ctx.translate(-canvas.width, 0);
-		rotated = 0;
-	}
-	if (orientationTwo == 6){
-		// 90° rotate right
-		canvas.width = img_h;
-			canvas.height = img_w;
-            ctx.rotate(0.5 * Math.PI);
-            ctx.translate(0, -canvas.width);
-            
-            rotated = 1;
-	}
+	
 	//draw image
 	ctx.drawImage(img, 0, 0);
 	HERMITE.resample_single(canvas, w, h, true);
+	// if (rotated == 1){
+	// 	// ctx.rotate(-0.5 * Math.PI);
+ //  //       ctx.translate(-canvas.width, 0);
+	// 	// rotated = 0;
+	// 	ctx.restore();
+	// }
+	// if (orientationTwo == 6){
+	// 	// 90° rotate right
+	// 	// canvas.width = img_h;
+	// 	// 	canvas.height = img_w;
+ //            ctx.rotate(0.5 * Math.PI);
+ //            ctx.translate(0, -canvas.height);
+            
+ //            rotated = 1;
+	// }
 }
 
 
