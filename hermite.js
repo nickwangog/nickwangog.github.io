@@ -1,4 +1,5 @@
-
+'use strict';
+var EXIF = require('./exif.js');
 var HERMITE = new Hermite_class();
 var canvas = document.getElementById("cc");
 var ctx = canvas.getContext("2d");
