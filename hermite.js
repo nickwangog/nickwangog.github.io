@@ -43,9 +43,9 @@ img.onload = function(){
 
 
 function connectToFilemaker(){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/sessions';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/sessions'; //change hostname and databasename
 	const headers = {
-		'Authorization': 'Basic YWRtaW46cHJlY2lzaW9u',
+		'Authorization': 'Basic YWRtaW46cHJlY2lzaW9u', //Base 64 encoded database username and password
 		'Content-Type': 'application/json'
 	}
 	return axios({
@@ -61,7 +61,7 @@ function connectToFilemaker(){
 }
 
 function creatFMRecord(token){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records'; //change host, dbname, and layout name
 	const headers = {
 		'Authorization': 'Bearer ' + token,
 		'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function creatFMRecord(token){
 }
 
 function uploadToContainerField(token, dataForm, recordID){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records/' + recordID + '/containers/Field';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records/' + recordID + '/containers/Field'; //change host, dbname, layout name, and container field name
 	const headers = {
 		'Authorization': 'Bearer ' + token
 	}
