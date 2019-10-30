@@ -45,7 +45,7 @@ img.onload = function(){
 function connectToFilemaker(){
 	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/sessions';
 	const headers = {
-		'Authorization': 'Basic YWRtaW46d2FmZmxlcw==',
+		'Authorization': 'Basic YWRtaW46cHJlY2lzaW9u',
 		'Content-Type': 'application/json'
 	}
 	return axios({
@@ -61,7 +61,7 @@ function connectToFilemaker(){
 }
 
 function creatFMRecord(token){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Genres/records';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records';
 	const headers = {
 		'Authorization': 'Bearer ' + token,
 		'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function creatFMRecord(token){
 }
 
 function uploadToContainerField(token, dataForm, recordID){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Genres/records/' + recordID + '/containers/Field';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records/' + recordID + '/containers/Field';
 	const headers = {
 		'Authorization': 'Bearer ' + token
 	}
