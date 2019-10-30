@@ -43,7 +43,7 @@ img.onload = function(){
 
 
 function connectToFilemaker(){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/sessions';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/sessions';
 	const headers = {
 		'Authorization': 'Basic YWRtaW46d2FmZmxlcw==',
 		'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function connectToFilemaker(){
 }
 
 function creatFMRecord(token){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Genres/records';
 	const headers = {
 		'Authorization': 'Bearer ' + token,
 		'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function creatFMRecord(token){
 }
 
 function uploadToContainerField(token, dataForm, recordID){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/ArtGallery_NW/layouts/Genres/records/' + recordID + '/containers/Field';
+	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Genres/records/' + recordID + '/containers/Field';
 	const headers = {
 		'Authorization': 'Bearer ' + token
 	}
