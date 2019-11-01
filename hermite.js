@@ -1,3 +1,16 @@
+var serverAddress = "https://jupiter.360works.com";
+var dbName = "PrecisionUpload";
+var dbUser = "admin";
+var dbPass = "waffles";
+var dbLayout = "Upload";
+var dbContainer = "Container";
+var dbOrientation = "Orientation";
+var base64Creds = btoa(dbUser+':'+dbPass);  
+// var base64Creds = "dXNlcjpwYXNz";
+/*base64 encodes your database credentials. Instead of setting your user and pass as variables,
+you can base64 encode your credentials in format "user:pass" outside of the code and enter that
+encoded string as the base64Creds variable (https://www.base64encode.org/). Example above*/
+
 
 var HERMITE = new Hermite_class();
 var canvas = document.getElementById("cc");
@@ -8,7 +21,7 @@ var current_size = false;
 var URL = window.webkitURL || window.URL;
 var orientation;
 var img = new Image();
-var orientationTwo = 0;
+var orientation2 = 0;
 var rotated = 0;
 
 $("#file_input").change(function(e){
@@ -16,15 +29,13 @@ var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
 img.crossOrigin = "Anonymous"; 
 getOrientation(e.target.files[0], function(orientation){
- 			if (orientation == 6 ){
- 				orientationTwo = 6;
- 			}
- 		})
+ 			orientation2 = orientation;
+ 	})
 });
 
 img.onload = function(){
-    var resize_size = 10; //1-100
-	resize(resize_size, img, canvas, ctx, HERMITE , orientationTwo);
+    var resize_size = 10; //1-100 Value of resizing
+	resize(resize_size, img, canvas, ctx, HERMITE , orientation2);
 	var loginResponse = connectToFilemaker();
 	loginResponse.then(function(data){
 		var token = data.data.response.token;
@@ -43,9 +54,9 @@ img.onload = function(){
 
 
 function connectToFilemaker(){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/sessions'; //change hostname and databasename
+	const Url= serverAddress+'/fmi/data/v1/databases/'+dbName+'/sessions';
 	const headers = {
-		'Authorization': 'Basic YWRtaW46cHJlY2lzaW9u', //Base 64 encoded database username and password
+		'Authorization': 'Basic '+base64Creds,
 		'Content-Type': 'application/json'
 	}
 	return axios({
@@ -61,17 +72,19 @@ function connectToFilemaker(){
 }
 
 function creatFMRecord(token){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records'; //change host, dbname, and layout name
+	const Url= serverAddress+'/fmi/data/v1/databases/'+dbName+'/layouts/'+dbLayout+ '/records';
 	const headers = {
 		'Authorization': 'Bearer ' + token,
 		'Content-Type': 'application/json',
 	}
+	var jsonText = '{ "fieldData" : ' +'{ "' + dbOrientation+'": "'+orientation2 +'"} }';
+	var data = JSON.parse(jsonText);
 	return axios({
 		method: 'post',
 		url: Url,
 		headers: headers,
 		crossDomain: true,
-		data: { "fieldData": {}},
+		data: data,
    		cache : false,
         contentType: false,
         processData: false
@@ -84,7 +97,7 @@ function creatFMRecord(token){
 }
 
 function uploadToContainerField(token, dataForm, recordID){
-	const Url= 'https://jupiter.360works.com/fmi/data/v1/databases/PrecisionUpload/layouts/Upload/records/' + recordID + '/containers/Field'; //change host, dbname, layout name, and container field name
+	const Url= serverAddress+'/fmi/data/v1/databases/'+dbName+'/layouts/'+dbLayout+'/records/'+recordID+'/containers/'+dbContainer;
 	const headers = {
 		'Authorization': 'Bearer ' + token
 	}
@@ -150,7 +163,7 @@ function getOrientation(file, callback) {
     reader.readAsArrayBuffer(file);
 }
 
-function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
+function resize(percentages, img, canvas, ctx, HERMITE, orientation2) {
 	img_w = img.width;
 	img_h = img.height;
 	var w =  Math.round(img_w * percentages / 100);
