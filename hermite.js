@@ -14,7 +14,7 @@ var rotated = 0;
 $("#file_input").change(function(e){
 var url = URL.createObjectURL(e.target.files[0]);
 img.src = url;
-img.crossOrigin = "Anonymous"; //cors support
+img.crossOrigin = "Anonymous"; 
 getOrientation(e.target.files[0], function(orientation){
  			if (orientation == 6 ){
  				orientationTwo = 6;
@@ -163,21 +163,6 @@ function resize(percentages, img, canvas, ctx, HERMITE, orientationTwo) {
 	//draw image
 	ctx.drawImage(img, 0, 0);
 	HERMITE.resample_single(canvas, w, h, true);
-	// if (rotated == 1){
-	// 	// ctx.rotate(-0.5 * Math.PI);
- //  //       ctx.translate(-canvas.width, 0);
-	// 	// rotated = 0;
-	// 	ctx.restore();
-	// }
-	// if (orientationTwo == 6){
-	// 	// 90° rotate right
-	// 	// canvas.width = img_h;
-	// 	// 	canvas.height = img_w;
- //            ctx.rotate(0.5 * Math.PI);
- //            ctx.translate(0, -canvas.height);
-            
- //            rotated = 1;
-	// }
 }
 
 
