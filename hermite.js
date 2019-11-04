@@ -3,6 +3,7 @@ var dbName = "PrecisionUpload";
 var dbUser = "admin";
 var dbPass = "waffles";
 var dbLayout = "Upload";
+var dbScript = "Rotate Container";
 var dbContainer = "Container";
 var dbOrientation = "Orientation";
 var base64Creds = btoa(dbUser+':'+dbPass);  
@@ -47,6 +48,7 @@ img.onload = function(){
 	        sendCanvas.toBlob(function (blob) {
 	        dataForm.append('upload', blob, "image.png");
 			uploadToContainerField(token, dataForm, recordID);
+			executeRotateScript(token);
 			})
     	});
 	})
@@ -93,7 +95,6 @@ function creatFMRecord(token){
 		return(data);
 	})
 	.catch(err=>console.log(err))
-	
 }
 
 function uploadToContainerField(token, dataForm, recordID){
@@ -113,6 +114,27 @@ function uploadToContainerField(token, dataForm, recordID){
 	})
 	.then(data=>console.log(data))	
 	.catch(err=>console.log(err))
+}
+
+
+function executeRotateScript(token){
+	const Url= serverAddress+'/fmi/data/v1/databases/'+dbName+'/layouts/'+dbLayout+ '/script/' + dbScript;
+	const headers = {
+		'Authorization': 'Bearer ' + token
+		// 'Content-Type': 'application/json',
+	}
+	axios({
+		method: 'get',
+		url: Url,
+		headers: headers
+		// crossDomain: true,
+		// data: data,
+  //  		cache : false,
+        // contentType: false
+  //       processData: false
+	})
+	.then(data=>console.log(data))
+	.catch(err=>console.log(err))	
 }
 
 function getOrientation(file, callback) {
