@@ -11,7 +11,7 @@ var base64Creds = btoa(dbUser+':'+dbPass);
 /*base64 encodes your database credentials. Instead of setting your user and pass as variables,
 you can base64 encode your credentials in format "user:pass" outside of the code and enter that
 encoded string as the base64Creds variable (https://www.base64encode.org/). Example above*/
-
+var resizeResolution = 10; //1-100 Value of resizing
 
 var HERMITE = new Hermite_class();
 var canvas = document.getElementById("cc");
@@ -35,7 +35,7 @@ getOrientation(e.target.files[0], function(orientation){
 });
 
 img.onload = function(){
-    var resize_size = 10; //1-100 Value of resizing
+    var resize_size = resizeResolution; //1-100 Value of resizing
 	resize(resize_size, img, canvas, ctx, HERMITE , orientation2);
 	var loginResponse = connectToFilemaker();
 	loginResponse.then(function(data){
