@@ -40,7 +40,7 @@ img.onload = function(){
 	var loginResponse = connectToFilemaker();
 	loginResponse.then(function(data){
 		var token = data.data.response.token;
-		var recordResponse = creatFMRecord (token);
+		var recordResponse = createFMRecord (token);
 		recordResponse.then(function(data){
 			var recordID = data.data.response.recordId;
 			var dataForm = new FormData();
@@ -72,7 +72,7 @@ function connectToFilemaker(){
 	.catch(err=>console.log(err))
 }
 
-function creatFMRecord(token){
+function createFMRecord(token){
 	const Url= serverAddress+'/fmi/data/v1/databases/'+dbName+'/layouts/'+dbLayout+ '/records';
 	const headers = {
 		'Authorization': 'Bearer ' + token,
