@@ -9,19 +9,9 @@ canvas{
 	-ms-interpolation-mode: nearest-neighbor;   /* IE                            */
 }
 
-/*body {
+body {
   padding: 0;
   margin: 0;
-}*/
-body {
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  text-align: center;
-}
-.imgButton {
-  text-align: center;
-  margin: auto;
 }
 
 .box {
@@ -30,9 +20,9 @@ body {
     height: 85%;
 }
 
-/*.imgButton{
+.imgButton{
     text-align:center;
-}*/
+}
 
 .rotate {
             transform: rotate(90deg);
