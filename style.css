@@ -27,3 +27,7 @@ body {
 .rotate {
             transform: rotate(90deg);
         }
+
+.hide {
+   display: none;
+}
